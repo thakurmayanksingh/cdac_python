@@ -9,7 +9,20 @@ Sample Output: 2
 """
 
 def main():
-    ...
+    inp = input("Input String: ")
+    sub = input("Substring: ")
+    window = len(sub)
+    cnt = 0
+    i, j = 0, window
+    while j <= len(inp):
+        if inp[i:j]==sub:
+            cnt += 1
+            i += 1
+            j += 1
+        else:
+            i += 1
+            j += 1
+    print(cnt)
 
 if __name__ == "__main__":
     main()

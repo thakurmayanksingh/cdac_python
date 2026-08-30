@@ -11,16 +11,31 @@ Sample Output: "abcd" (since "a1b1c1d1" is longer than "abcd")
 
 def main():
     inp = input("Sample Input: ")
-    mp = {}
-    for char in inp:
-        if char in mp:
-            mp[char] += 1
-        else:
-            mp[char] = 1
+    if not inp or len(inp)<2:
+        print(f"Sample Output: {inp}")
+        return
+
     comp_str = ""
-    for item in mp:
-        comp_str = comp_str + item + str(mp[item])
-    print(comp_str)
+    cnt = 1
+    i, j = 0, 1
+
+    while j<len(inp):
+        if inp[i] == inp[j]:
+            cnt += 1
+            j += 1
+        else:
+            comp_str += inp[i] + str(cnt)
+            i = j
+            j += 1
+            cnt = 1
+        if j == len(inp):
+            comp_str += inp[i] + str(cnt)
+
+    if len(comp_str)<len(inp):
+        print(f"Sample Output: {comp_str}")
+        return
+
+    print(f"Sample Output: {inp}")
 
 if __name__ == "__main__":
     main()

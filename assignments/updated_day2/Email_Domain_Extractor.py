@@ -10,6 +10,7 @@ Sample Output: "Invalid Email"
 
 def main():
     inp = input("Sample Input: ")
+    # print(inp.split('@')[1])
     if inp.find("@") != -1:
         idx = inp.index("@")
         print(f"Sample Output: {inp[idx+1:]}")

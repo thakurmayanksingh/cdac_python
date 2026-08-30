@@ -12,14 +12,17 @@ def palindrome(st):
     return st == st[::-1]
 
 def main():
+    
     inp = input("Sample Input: ")
     max_len = 0
     ans = ''
+
     for i in range(len(inp)):
         for j in range(i+1, len(inp)):
-            if palindrome(inp[i:j+1]):
-                max_len = max(max_len, len(inp[i:j+1]))
+            if palindrome(inp[i:j+1]) and max_len < len(inp[i:j+1]):
+                max_len = len(inp[i:j+1])
                 ans = inp[i:j+1]
+
     print(f"Sample Output: {ans}")
 
 if __name__ == "__main__":
