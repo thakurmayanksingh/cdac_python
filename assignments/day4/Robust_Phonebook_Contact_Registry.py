@@ -23,12 +23,11 @@ def register_contact(phonebook, name, phone_input):
 
     try:
         int(phone_input)
-    except ValueError as e:
+    except ValueError:
         raise InvalidPhoneNumberError("Phone number must contain digits only.")
 
     phonebook[name] = phone_input
     return phonebook        
-    ...
 
 def main():
     contacts = {}
