@@ -24,7 +24,7 @@ print(validate_academic_email("bob@mit.edu.com"))          # Output: False (does
 
 import re
 def validate_academic_email(email:str):
-    if email.endswith('.edu', '.res.in'):
+    if email.endswith('.edu') or email.endswith('.res.in'):
         pattern = r'^[a-z0-9._]+@[a-z0-9.-]+$'
         res = re.fullmatch(pattern, email)
         if res:
