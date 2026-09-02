@@ -34,6 +34,5 @@ def main():
     print(register_contact(contacts, "Alice", "0987654321"))
     # print(register_contact(contacts, "Bob", "123-456-789"))
     print(register_contact(contacts, "Bob123", "9876543210"))
-    ...
 
 if __name__ == "__main__": main()

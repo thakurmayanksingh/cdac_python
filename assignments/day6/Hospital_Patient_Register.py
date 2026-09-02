@@ -1,4 +1,4 @@
-"""
+'''
 Assignment 4: Hospital Patient Register
 Scenario
 A hospital patient ledger automatically tracks patient counts and assigns sequentially numbered keys. It also validates input dates to prevent registration crashes.
@@ -31,18 +31,49 @@ except ValueError as e:
     print(e)  # Output: Invalid date of birth format: '12/08/1998'. Expected YYYY-MM-DD.
 
 print(Patient.get_total_patients())  # Output: 1
-"""
+
+'''
 
 import re
+class Patient:
+    _patient_counter = 0
 
-# class Patient:
-#     _patient_counter = 0
+    @classmethod
+    def get_total_patients(cls):
+        return cls._patient_counter
+    
+    @staticmethod
+    def validate_dob_format(dob_str):
+        pattern = r'^\d{4}-\d{2}-\d{2}$'
+        if not re.fullmatch(pattern, dob_str):
+            return False
+        return True
 
-#     @staticmethod
-#     def validate_dob_format(dob_str):
-#         pattern = r''
+    def __init__(self, name:str, dob:str):
+        self.name = name
+        self.dob = dob
+        if Patient.validate_dob_format(self.dob):
+            Patient._patient_counter += 1
+        else:
+            raise ValueError(f"Invalid date of birth format: {self.dob!r}. Expected YYYY-MM-DD.")
+        
+        self.patient_id = f"PAT-{1000 + Patient._patient_counter}"
+
 
 def main():
-    ...
+    # 1. Valid Registration
+    p1 = Patient("Arham Khan", "1999-05-15")
+    p2 = Patient("Mayank Singh", "2004-10-29")
+    print(p1.patient_id)  # Output: PAT-1001
+    print(p2.patient_id)
 
-if __name__ == "__main__": main()
+    # 2. Invalid DOB registration (throws ValueError)
+    try:
+        p2 = Patient("Lisa", "12/08/1998")
+    except ValueError as e:
+        print(e)  # Output: Invalid date of birth format: '12/08/1998'. Expected YYYY-MM-DD.
+
+    print(Patient.get_total_patients())  # Output: 1
+
+
+if __name__ == "__main__":  main()
