@@ -53,21 +53,24 @@ except RecordNotFoundError as e:
     print(e)  # Output: Record with name 'Charlie' not found in database.
 """
 
-class RecordNotFoundError(Exception): pass
+class RecordNotFoundError(Exception):
+    pass
+
 
 class DatabaseRecord:
-    def __init__(self, record_id:int, kwargs:dict):
-        self.record = record_id
-        self.data = kwargs
+    def __init__(self, record_id: int, data: dict):
+        self.record_id = record_id
+        self.data = data
 
     def __repr__(self):
-        return f"Record(id={self.record}, data={self.data})"
+        return f"Record(id={self.record_id}, data={self.data})"
 
     def __str__(self):
-        return f"Record(id={self.record}, data={self.data})"
+        return f"Record(id={self.record_id}, data={self.data})"
+
 
 class ResultSetIterator:
-    def __init__(self, record_list:list):
+    def __init__(self, record_list: list):
         self.record_list = record_list
         self.idx = 0
 
@@ -77,10 +80,14 @@ class ResultSetIterator:
     def __next__(self):
         if self.idx >= len(self.record_list):
             raise StopIteration
+        
+        record = self.record_list[self.idx]
+        self.idx += 1
+        return record
+
 
 class DatabaseResultSet:
-
-    def __init__(self, records_list:list):
+    def __init__(self, records_list: list):
         self.records_list = records_list
 
     def __len__(self):
@@ -89,29 +96,24 @@ class DatabaseResultSet:
     def __iter__(self):
         return ResultSetIterator(self.records_list)
 
-    def __getitem__(self, key:int):
-        if type(key) is int:
-            if key >= len(self.records_list):
-                raise IndexError
+    def __getitem__(self, key):
+        if isinstance(key, int):
             return self.records_list[key]
+        
+        elif isinstance(key, str):
+            for record in self.records_list:
+                if record.data.get("name") == key:
+                    return record
+            raise RecordNotFoundError(f"Record with name '{key}' not found in database.")
+        
         else:
-            for obj in self.records_list:
-                self.record_id = obj.record
-                name = obj.data['name']
-                role = obj.data['role']
-                if key == name:
-                    return self.record_id
-            raise RecordNotFoundError(f"Record with name {key!r} not found in database.")
+            raise TypeError("Lookup key must be an integer or a string.")
 
-                
-
-# [Record(id=101, data={'name': 'Alice', 'role': 'Admin'}), Record(id=102, data={'name': 'Bob', 'role': 'User'})]
 
 def main():
     # Setup records
     r1 = DatabaseRecord(101, {"name": "Alice", "role": "Admin"})
     r2 = DatabaseRecord(102, {"name": "Bob", "role": "User"})
-
     results = DatabaseResultSet([r1, r2])
 
     # 1. Length
@@ -137,4 +139,6 @@ def main():
     except RecordNotFoundError as e:
         print(e)  # Output: Record with name 'Charlie' not found in database.
 
-if __name__ == "__main__":  main()
+
+if __name__ == "__main__":
+    main()
